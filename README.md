@@ -1,35 +1,38 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🛡️ NestJS To-do App with JWT Authentication
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A secure RESTful API built with **NestJS**, **MongoDB (Cloud Cluster)**, and **JWT** that supports **user registration**, **login**, **access/refresh token-based authentication**, and **session management**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🚀 Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- User registration with `name`, `email`, and `password`
+- Login with email and password
+- Secure password hashing with bcrypt
+- JWT-based authentication (Access & Refresh tokens)
+- Token refresh endpoint
+- MongoDB Cloud integration with Mongoose
+- RESTful API with DTO validation
 
-## Project setup
+---
+
+## 📁 Technologies
+
+- **NestJS**
+- **Mongoose** (MongoDB ODM)
+- **JWT** (`@nestjs/jwt`)
+- **bcryptjs**
+- **class-validator / class-transformer**
+
+---
+
+## 🧑‍💻 Getting Started
+
+### 1. Clone the repo
 
 ```bash
-$ npm install
-```
+git clone https://github.com/rafi-ruetcse17/backend.git
+
 
 ## Compile and run the project
 
@@ -43,6 +46,80 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## API Endpoints 
+
+Base URL: http://localhost:4000
+
+---
+
+POST /auth/signup
+------------------
+Description: Register a new user.
+
+Request Body:
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "yourpassword"
+}
+
+Success Response (201)
+
+---
+
+POST /auth/login
+-----------------
+Description: Login user and return tokens.
+
+Request Body:
+{
+  "email": "john@example.com",
+  "password": "yourpassword"
+}
+
+Success Response (200):
+{
+  "accessToken": "<JWT_ACCESS_TOKEN>",
+  "refreshToken": "<JWT_REFRESH_TOKEN>"
+}
+
+---
+
+POST /auth/refresh
+-------------------
+Description: Generate a new access token using a refresh token.
+
+Request Body:
+{
+  "refreshToken": "<JWT_REFRESH_TOKEN>"
+}
+
+Success Response (200):
+{
+  "accessToken": "<NEW_JWT_ACCESS_TOKEN>"
+}
+
+---
+
+Token Notes:
+-------------
+- Access Token: Short-lived (e.g., 15 minutes)
+- Refresh Token: Long-lived (e.g., 7 days)
+- Use access token for all protected routes
+- When access token expires, use refresh token to get a new one
+
+---
+
+Status Codes:
+--------------
+200 – Success  
+400 – Bad Request  
+401 – Unauthorized  
+403 – Forbidden  
+500 – Server Error
+
+
 
 ## Run tests
 
