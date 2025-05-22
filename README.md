@@ -47,6 +47,12 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Schema Design
+
+![todoApps Schema](https://drive.google.com/file/d/1FQBZWt1WWXRpbPd-E2HJlYDYj6tDNNnm/view?usp=sharing)
+
+---
+
 ## API Endpoints 
 
 Base URL: http://localhost:4000
