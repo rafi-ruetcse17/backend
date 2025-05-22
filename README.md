@@ -49,7 +49,7 @@ $ npm run start:prod
 
 ## Schema Design
 
-![todoApps Schema](https://drive.google.com/file/d/1FQBZWt1WWXRpbPd-E2HJlYDYj6tDNNnm/view?usp=sharing)
+![todoApps Schema](./assets/todoapps_schema.png)
 
 ---
 
