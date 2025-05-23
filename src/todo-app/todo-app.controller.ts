@@ -21,17 +21,19 @@ export class ToDoAppController {
   constructor(private readonly todoService: ToDoAppService) {}
 
   @Post('create')
-  create(@Body() dto: CreateToDoAppDto) {
-    return this.todoService.create(dto);
+  create(@Body() dto: CreateToDoAppDto, @Req() req: Request) {
+    const user = req.user as { sub: string };
+    return this.todoService.create(user.sub, dto);
   }
 
   @Post('invite/:id')
   invite(
     @Param('id') appId: string,
-    @Body('owner') owner: string,
     @Body() dto: InviteCollaboratorDto,
+    @Req() req: Request,
   ) {
-    return this.todoService.invite(appId, owner, dto);
+    const user = req.user as { sub: string };
+    return this.todoService.invite(appId, user.sub, dto);
   }
 
   @Delete(':id')

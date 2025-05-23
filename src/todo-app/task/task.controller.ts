@@ -37,10 +37,16 @@ export class TaskController {
     @Param('appId') appId: string,
     @Query('pageNumber') pageNumber = '1',
     @Query('pageSize') pageSize = '10',
+    @Req() req: Request,
   ) {
     const page = parseInt(pageNumber);
     const limit = parseInt(pageSize);
-    return this.taskService.getTasksPaginated(appId, page, limit);
+    return this.taskService.getTasksPaginated(
+      appId,
+      page,
+      limit,
+      req['user'].sub,
+    );
   }
 
   @Patch(':appId/tasks/:taskId')

@@ -10,6 +10,7 @@ import { CreateTaskDto } from './dtos/create-task.dto';
 import { UpdateTaskDto } from './dtos/update-task.dto';
 import { TaskStatus } from 'src/lib/enum/task-status.enum';
 import { canEdit } from './utils/permission.utils';
+import { CollaboratorRole } from '../enum/role.enum';
 
 @Injectable()
 export class TaskService {
@@ -40,24 +41,56 @@ export class TaskService {
     return updatedApp?.tasks[updatedApp.tasks.length - 1];
   }
 
-  async getTasksPaginated(appId: string, page: number, limit: number) {
+  async getTasksPaginated(
+    appId: string,
+    page: number,
+    limit: number,
+    userId: string,
+  ) {
     const skip = (page - 1) * limit;
 
     const result = await this.toDoModel.aggregate([
       { $match: { _id: new Types.ObjectId(appId) } },
+      { $unwind: '$tasks' },
+      { $sort: { 'tasks.createdAt': -1 } },
+      {
+        $group: {
+          _id: '$_id',
+          tasks: { $push: '$tasks' },
+          totalCount: { $sum: 1 },
+          owner: { $first: '$owner' },
+          collaborators: { $first: '$collaborators' },
+        },
+      },
       {
         $project: {
-          totalCount: { $size: '$tasks' },
           tasks: { $slice: ['$tasks', skip, limit] },
+          totalCount: 1,
+          collaborators: 1,
+          owner: 1,
         },
       },
     ]);
 
-    if (!result.length) throw new NotFoundException('ToDoApp not found');
+    if (!result.length) throw new NotFoundException('No task found');
+    const { totalCount, tasks, owner, collaborators } = result[0];
+
+    let role = CollaboratorRole.VIEWER;
+    if (owner.toString() === userId.toString()) {
+      role = CollaboratorRole.OWNER;
+    } else {
+      const matchedCollaborator = collaborators.find(
+        (collab: any) => collab.userId.toString() === userId.toString(),
+      );
+      if (matchedCollaborator) {
+        role = matchedCollaborator.role;
+      }
+    }
 
     return {
-      totalCount: result[0].totalCount,
-      tasks: result[0].tasks,
+      totalCount,
+      tasks,
+      role,
       page,
       pageSize: limit,
     };

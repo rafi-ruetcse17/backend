@@ -16,8 +16,8 @@ export class ToDoAppService {
     @InjectModel(ToDoApp.name) private toDoModel: Model<ToDoAppDocument>,
   ) {}
 
-  async create(dto: CreateToDoAppDto) {
-    return this.toDoModel.create({ title: dto.title, owner: dto.owner });
+  async create(userId: string, dto: CreateToDoAppDto) {
+    return this.toDoModel.create({ title: dto.title, owner: userId });
   }
 
   async invite(
@@ -30,6 +30,9 @@ export class ToDoAppService {
 
     if (!compareObjectIds(owner, app.owner))
       throw new ForbiddenException('Only owner can invite');
+
+    if (compareObjectIds(owner, inviteDto.userId))
+      throw new ForbiddenException('You cannot invite yourself!');
 
     const alreadyAdded = app.collaborators.find((c) =>
       compareObjectIds(c.userId, inviteDto.userId),
@@ -46,8 +49,6 @@ export class ToDoAppService {
   }
 
   async delete(todoAppId: string, owner: string) {
-    console.log(owner, todoAppId);
-    
     const app = await this.toDoModel.findById(todoAppId);
     if (!app) throw new NotFoundException('ToDo App not found');
     if (!compareObjectIds(owner, app.owner))
@@ -67,7 +68,7 @@ export class ToDoAppService {
 
     return apps.map((app) => {
       if (app.owner.toString() === userId) {
-        return { ...app, role: 'Owner' };
+        return { ...app, role: 'owner' };
       }
 
       const collaborator = app.collaborators.find((c) =>
