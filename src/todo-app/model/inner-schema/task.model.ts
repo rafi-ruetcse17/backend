@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
-import { TaskStatus } from '../enum/status.enus';
+import { Types } from 'mongoose';
+import { TaskStatus } from 'src/lib/enum/task-status.enum';
 
-@Schema({ timestamps: true })
+@Schema({ _id: true, timestamps: true })
 export class Task {
   @Prop({ required: true })
   title: string;
@@ -17,12 +17,10 @@ export class Task {
   })
   status: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'ToDoApp', required: true })
-  todoApp: Types.ObjectId;
-
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   createdBy: Types.ObjectId;
+
+  _id?: Types.ObjectId;
 }
 
-export type TaskDocument = Task & Document;
 export const TaskSchema = SchemaFactory.createForClass(Task);

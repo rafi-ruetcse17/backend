@@ -4,6 +4,7 @@ import {
   Collaborator,
   CollaboratorSchema,
 } from './inner-schema/collaborator.model';
+import { Task } from './inner-schema/task.model';
 
 @Schema({ timestamps: true })
 export class ToDoApp {
@@ -18,6 +19,9 @@ export class ToDoApp {
 
   @Prop({ type: [CollaboratorSchema], default: [] })
   collaborators: Collaborator[];
+
+  @Prop({ type: [Task], default: [] })
+  tasks: Task[];
 }
 
 export type ToDoAppDocument = ToDoApp & Document;

@@ -6,7 +6,7 @@ import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { TodoAppModule } from './todo-app/todo-app.module';
-import { TaskModule } from './task/task.module';
+import { TaskModule } from './todo-app/task/task.module';
 
 @Module({
   imports: [

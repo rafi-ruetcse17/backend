@@ -1,28 +1,32 @@
-# 🛡️ NestJS To-do App with JWT Authentication
+# 🛡️ NestJS Collaborative ToDo App
 
-A secure RESTful API built with **NestJS**, **MongoDB (Cloud Cluster)**, and **JWT** that supports **user registration**, **login**, **access/refresh token-based authentication**, and **session management**.
+A secure, efficient, and collaborative ToDo app backend built with **NestJS**, **MongoDB (Mongoose)**, and **JWT Auth**.
 
 ---
 
 ## 🚀 Features
 
-- User registration with `name`, `email`, and `password`
-- Login with email and password
-- Secure password hashing with bcrypt
-- JWT-based authentication (Access & Refresh tokens)
-- Token refresh endpoint
-- MongoDB Cloud integration with Mongoose
-- RESTful API with DTO validation
+### 🔐 Authentication
+- Signup & Login with JWT (Access + Refresh Tokens)
+- Passwords hashed using `bcryptjs`
+- Token refresh & logout support
 
----
+### 🗂️ ToDo App
+- Create personal ToDo apps
+- Invite collaborators with role: `viewer` or `editor`
+- Only **owner** or **editors** can modify tasks
 
-## 📁 Technologies
+### ✅ Tasks (Embedded in ToDo App)
+- Add, update, delete tasks (embedded subdocuments)
+- **Paginated** task fetch via query params: `pageNumber`, `pageSize`
+- Query optimizations:
+  - Use of `$push` with `$slice` to get newly added task
+  - Atomic updates with `findOneAndUpdate` for subdocuments
+  - Mongo projections to reduce response size
 
-- **NestJS**
-- **Mongoose** (MongoDB ODM)
-- **JWT** (`@nestjs/jwt`)
-- **bcryptjs**
-- **class-validator / class-transformer**
+### 🛡️ AuthGuard
+- All ToDo and Task routes are protected with `@UseGuards(AuthGuard)`
+- Access control enforced on service level with helper `canEdit()`
 
 ---
 
@@ -49,7 +53,7 @@ $ npm run start:prod
 
 ## Schema Design
 
-![todoApps Schema](./assets/todoapps_schema.png)
+![todoApps Schema](./assets/todoapps_schema_v2.png)
 
 ---
 
