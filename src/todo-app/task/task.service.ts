@@ -51,13 +51,15 @@ export class TaskService {
 
     const result = await this.toDoModel.aggregate([
       { $match: { _id: new Types.ObjectId(appId) } },
-      { $unwind: '$tasks' },
+      { $unwind: { path: '$tasks', preserveNullAndEmptyArrays: true } },
       { $sort: { 'tasks.createdAt': -1 } },
       {
         $group: {
           _id: '$_id',
           tasks: { $push: '$tasks' },
-          totalCount: { $sum: 1 },
+          totalCount: {
+            $sum: { $cond: [{ $ifNull: ['$tasks', false] }, 1, 0] },
+          },
           owner: { $first: '$owner' },
           collaborators: { $first: '$collaborators' },
         },
