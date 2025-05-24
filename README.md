@@ -10,6 +10,7 @@ This backend powers a collaborative ToDo platform where:
 - Perform **task CRUD operations** (create, update, delete, change status) with role-based access control.
 - **Paginated & sorted** task retrieval for enhanced performance.
 - Protected routes and service-level guards for maximum security.
+- **Real-time** task status update using **Web socket**.
 
 ---
 
@@ -36,6 +37,13 @@ This backend powers a collaborative ToDo platform where:
 - All ToDo and Task routes are protected with `@UseGuards(AuthGuard)`
 - Access control enforced on service level with helper `canEdit()`
 
+### 📡 Real-time Updates (Socket.io)
+- Implemented using `@nestjs/websockets` and `socket.io`.
+- Each user joins a **room based on appId** to receive task updates.
+- Server emits `taskUpdated` events on task status change.
+- Clients listening in the same room receive and reflect real-time changes.
+
+![socket_events](./assets/socket_events.png)
 ---
 
 ## 🧑‍💻 Getting Started
