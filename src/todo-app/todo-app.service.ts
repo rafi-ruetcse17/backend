@@ -64,6 +64,7 @@ export class ToDoAppService {
           { 'collaborators.userId': new Types.ObjectId(userId) },
         ],
       })
+      .sort({ createdAt: -1 })
       .lean();
 
     return apps.map((app) => {
