@@ -3,12 +3,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ToDoApp, ToDoAppSchema } from '../model/todo-app.model';
 import { TaskService } from './task.service';
 import { TaskController } from './task.controller';
+import { TaskGateway } from './task.gateway';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: ToDoApp.name, schema: ToDoAppSchema }]),
   ],
-  providers: [TaskService],
+  providers: [TaskService, TaskGateway],
   controllers: [TaskController],
   exports: [TaskService],
 })

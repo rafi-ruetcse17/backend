@@ -11,12 +11,14 @@ import { UpdateTaskDto } from './dtos/update-task.dto';
 import { TaskStatus } from 'src/lib/enum/task-status.enum';
 import { canEdit } from './utils/permission.utils';
 import { CollaboratorRole } from '../enum/role.enum';
+import { TaskGateway } from './task.gateway';
 
 @Injectable()
 export class TaskService {
   constructor(
     @InjectModel(ToDoApp.name)
     private readonly toDoModel: Model<ToDoAppDocument>,
+    private readonly taskGateway: TaskGateway,
   ) {}
 
   async createTask(appId: string, dto: CreateTaskDto) {
@@ -126,9 +128,12 @@ export class TaskService {
 
     if (!updatedApp) throw new NotFoundException('Task or ToDoApp not found');
 
-    return (updatedApp.tasks as any[]).find(
+    const updatedTask = (updatedApp.tasks as any[]).find(
       (task) => task._id.toString() === taskId,
     );
+
+    this.taskGateway.emitTaskUpdated(appId, updatedTask);
+    return updatedTask;
   }
 
   async deleteTask(appId: string, taskId: string, userId: string) {
