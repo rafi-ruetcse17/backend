@@ -45,9 +45,9 @@ This backend powers a collaborative ToDo platform where:
 ```bash
 git clone https://github.com/rafi-ruetcse17/backend.git
 
-## Open termina (i.e. VS Code) and install dependencies
-cd backend
-npm install
+## Open terminal (i.e. VS Code) and install dependencies
+$ cd backend
+$ npm install
 
 ## Compile and run the project
 
