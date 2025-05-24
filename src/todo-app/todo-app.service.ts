@@ -45,7 +45,8 @@ export class ToDoAppService {
         role: inviteDto.role,
       });
     }
-    return app.save();
+    await app.save();
+    return { message: 'Collaborator invited successfully' };
   }
 
   async delete(todoAppId: string, owner: string) {
@@ -68,16 +69,18 @@ export class ToDoAppService {
       .lean();
 
     return apps.map((app) => {
+      const { tasks, collaborators, ...neccessaryAppProps } = app;
+
       if (app.owner.toString() === userId) {
-        return { ...app, role: 'owner' };
+        return { ...neccessaryAppProps, role: 'owner' };
       }
 
-      const collaborator = app.collaborators.find((c) =>
+      const collaborator = collaborators.find((c) =>
         compareObjectIds(c.userId, userId),
       );
 
       return {
-        ...app,
+        ...neccessaryAppProps,
         role: collaborator?.role,
       };
     });
